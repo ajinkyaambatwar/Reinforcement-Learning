@@ -1,0 +1,215 @@
+\documentclass[a4paper,english]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\makeatletter
+
+\special{papersize=\the\paperwidth,\the\paperheight}
+
+\usepackage{algorithmic}
+\usepackage{algorithm2e}
+
+\makeatother
+
+\usepackage{babel}
+\begin{document}
+
+\title{Intro to RL and Bandits}
+
+\author{Ajinkya Ambatwar\\
+EE16B104\\
+Dept. Of Electrical Engineering}
+\maketitle
+\begin{enumerate}
+\item Tic-tac toe has a very limited and small set of possible states. So
+learning through previous experience is not so complicated task for
+the RL agent. 
+\begin{enumerate}
+\item Now the agent has to make sure that it visits every possible state
+often in order to learn the dynamics of early winning. Also if it
+does an exploring start, it will have a benefit of making prediction
+with a set of statistically similar position. Now speaking of statistically
+similar, the agent can easily learn such states if we simplify the
+definition of \textbf{'State'} and \textbf{'Action'}. Since by this
+the agent can look for multiple statistically similar states though
+they might not look the same as per the board position. This will
+lessen the dimension of the state and the agent will work with smaller
+state space by taking the advantage of the similarity.
+\item So if our opponent is not taking the advantage of symmetry then it
+is recommended for the agent not to go for symmetry. As we have seen
+that the symmetry based method will reduce the state space and also
+the number of parameters defining the state. So if the opponent is
+not the one seeking for symmetry and goes by seeking the actual set
+of parameters defining a set(and hence works with a larger state space)
+the agent should also do the same. 
+\item So symmetrically equivalent positions should have the same value if
+we are considering the system to be fully Markov(as is the case most
+of the times).
+\end{enumerate}
+\item If the leaning agent starts playing against itself, initially both
+of them will start taking very random moves that probaly won't make
+any sense as they will be doing an exploratory start. But later as
+they go on playing against each other they might come up with a strategy
+that even the real human players are not recommended to take and might
+even win with that policy. So it might learn a totally different policy.
+But the learning duration will be a lot. Also there is a possibility
+that the agent might develope a strategy that will facilitate by winning
+itself. Hence it will oscillate between a ``Good'' and a ``Bad''
+move. Hence it might not even learn based on the sustained policy.
+\item If the agent always learns to play completely greedy, it will definitely
+lose the benefit of exploration. This will result in the agent getting
+stuck at the local optima which in most of the cases will be a suboptimum
+point. Now if the $Q$ for all the action is initialized with same
+constant(say zero) and the first action is determined, then with a
+completely greedy policy the agent will go on just exploiting the
+same action again and again(if the initial reward it gets is positive)
+and if the initial action chosen is not the ``best action'' it will
+saturate at some lesser value of average reward far from the optimal
+reward that it coulf have received. So compared to non-greedy(or $\epsilon-greedy$)
+player, initially it might do well as it will choose the greedy actions
+and take over the other player, but in long term(say after 10 trials)
+it will start performing poor and fall behind the non-greedy player.
+\begin{figure}[H]
+\begin{centering}
+\includegraphics[scale=0.4]{/home/ajinkya/Pictures/greedy_vs_non_greedy}
+\par\end{centering}
+\caption{Greedy vs $\epsilon-greedy$ policy}
+\end{figure}
+\item In the optimistic start, the average Q values for all the arms is
+initialized with some larger value, larger than the reward supposed
+to be received after every action. So because of this, the agent will
+do more initial exploration automatically. So in this process, if
+somehow it comes across the $better$ choices of actions initially,
+the average Q value for those actions(say $a_{better}$), $Q(a_{better})$will
+be magnified which will emphasis the agent to play more of such actions.This
+results in up spikes. But as the agent is still doing exploration,
+it is expected to come across some worse action choices(say $a_{worse}$),
+hence the Q values for those actions($Q(a_{worse})$) will be diminished
+which will result in initial poor play and hence will show down spikes.
+\item In such a setup, it is clear that the actual reward vector is changing
+at every time step and the regret is defined based on the actual reward
+rather than the long term return. So this can be assumed as a single,
+nonstationary $k$-armed bandit problem and we can try to solve it
+using one of the non-stationary bandit methods(say by keeping $\alpha$
+constant). But unless the the true action value(here the revealed
+rewards at each time steps) change slowly, these methods will not
+work well. So the necessary condition for this to work is that the
+variance of the unknown distribution should be less. As mentioned,
+unless we are sure that the rewards are not changing heavily, we can
+benefit ourselves with the fact that the rewards are revealed and
+go for the greedy action every time. And suppose the rewards are changing
+heavily, then in this case it would be recommended to learn a policy.
+Then in such a case if the some distinctive clue is provided to how
+the rewards will be at given time step compared to other time steps,
+then after sufficient trials a policy can be learned to associate
+the nature of sampled rewards with the current state of the task.
+This kind of learning is also called as ``\textit{associative mapping}''.
+\item The idea should be
+\begin{enumerate}
+\item Initially take some trials with the normal UCB algorithm method.
+\item If the implemetation is devised properly the action values are expected
+to converge to their true means after infinite iterations.
+\item Say after first K iterations, we will have some estimate of $\mu$
+for each action with some uncertainty. Now as we already know the
+true values for each action, we will pair the estimate with that true
+value which lies in the $\epsilon-$range with probability
+\[
+P[|\mu-Q_{K}|\leq\epsilon]
+\]
+ which should be the largest in order to find the correct pair. So
+now the true value and the estimate pairs are formed correctly with
+higher probability.
+\item Now as we know the true value and estimate pairs, now we can set the
+bounds as follows
+\begin{enumerate}
+\item Let $\epsilon_{s}$ be the required certainty.
+\item Now as per the chernoff inequality
+\[
+P[|\mu-Q_{n}|\leq\epsilon_{s}]\geq exp(-2\epsilon_{s}^{2}n)
+\]
+\item With this we can ascertain the value $n$ for more certain bounds.
+\end{enumerate}
+\end{enumerate}
+\item The derivation is as follows -
+\begin{align*}
+\rho_{t+1}(a) & =\rho_{t}(a)+\beta\frac{\partial E(R_{t})}{\partial\rho_{t}(a)}\\
+\end{align*}
+
+where $E[R_{t}]=\sum_{b}\pi_{t}(b)q_{*}(b)$. Now
+\begin{align*}
+\frac{\partial E[R_{t}]}{\partial\rho_{t}(a)} & =\frac{\partial}{\partial\rho_{t}(a)}[\sum\pi_{t}(b)q_{*}(b)_{b}]\\
+ & =\sum_{b}q_{*}(b)\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}\\
+ & =\sum_{b}[q_{*}(b)-X_{t}]\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}
+\end{align*}
+
+Where $X_{t}$ is a scalar and $\sum_{b}\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}=0$,
+hence inclusion of $X_{t}$ won't make any difference. Now when $\rho_{t}(a)$
+is changed,some actions'probabilities go up while some others go down
+but the sum of all the probabilities must be 1 hence the sum of partial
+derivative is 0.
+\begin{align}
+\frac{\partial E[R_{t}]}{\partial\rho_{t}(a)} & =\sum_{b}\pi_{t}(b)(q_{*}(b)-X_{t})\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}/\partial\pi_{t}(b)\nonumber \\
+ & =E[(q_{*}(A_{t})-X_{t})\frac{\partial\pi_{t}(A_{t})}{\partial\rho_{t}(a)}/\partial\pi_{t}(A_{t})]\label{A(t) is the random variable}\\
+ & =E[(R_{t}-\bar{R_{t}})\frac{\partial\pi_{t}(A_{t})}{\partial\rho_{t}(a)}/\partial\pi_{t}(A_{t})]
+\end{align}
+
+Where here we have chosen $X_{t}=\bar{R_{t}}$(baseline) and substituted
+$R_{t}$ for $q_{*}(A_{t})$ which is valid because $E[R_{t}|A_{t}]=q_{*}(A_{t})$
+. Now
+\begin{align}
+\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)} & =\frac{\partial}{\partial\rho_{t}(a)}\pi_{t}(b)\nonumber \\
+ & =\frac{\partial}{\partial\rho_{t}(a)}[\frac{exp(\rho_{t}(b))}{\sum_{c=1}^{n}exp(\rho_{t}(c))}]\nonumber \\
+ & =\frac{\frac{\partial exp(\rho_{t}(b)}{\partial\rho_{t}(a)}\sum_{c=1}^{k}exp(\rho_{t}(c))-exp(\rho_{t}(b)\frac{\partial\sum_{c=1}^{k}exp(\rho_{t}(c))}{\partial\rho_{t}(a)}}{(\sum_{c=1}^{n}exp(\rho_{t}(c)))^{2}}\nonumber \\
+ & =\frac{1_{a=b}exp(\rho_{t}(b))\sum_{c=1}^{k}exp(\rho_{t}(c))-exp(\rho_{t}(b))exp(\rho_{t}(a))}{(\sum_{c=1}^{n}exp(\rho_{t}(c)))^{2}}\nonumber \\
+ & =1_{a=b}\pi_{t}(b)-\pi_{t}(b)\pi_{t}(a)\nonumber \\
+ & =\pi_{t}(b)(1_{a=b}-\pi_{t}(a))\label{eq}
+\end{align}
+
+Now substituting (3) in (2), we get
+\begin{equation}
+\frac{\partial E[R_{t}]}{\partial\rho_{t}(a)}=E[(R_{t}-\bar{R_{t}})(1_{a=A_{t}}-\pi_{t}(a))]\label{eq-1}
+\end{equation}
+
+Now for each time step update we shall take sample of (4) and substitute
+it in the original equation, which gives
+\[
+\rho_{t+1}(a)=\rho_{t}(a)+\beta(R_{t}-\bar{R_{t}})(1_{a=A_{t}}-\pi_{t}(a))
+\]
+
+$\bar{R_{t}}$ is the baseline
+\item Assuming the parameters to be $\mu$ and $\sigma$, the policy $\pi$
+is
+\begin{align}
+\pi(a|\mu,\sigma^{2}) & =\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(a-\mu)^{2}}{2\sigma})\label{Sampled from the normal distribution}
+\end{align}
+
+Now for the mean we can write
+\begin{align*}
+\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\mu_{t}} & =\frac{\partial}{\partial\mu_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}}\}\\
+ & =\frac{a_{t}-\mu_{t}}{\sigma_{t}^{2}}
+\end{align*}
+
+Similarly for the variance we can write,
+\begin{align*}
+\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\sigma_{t}} & =\frac{\partial}{\partial\sigma_{t}}\{-ln(\sqrt{2\pi\sigma_{t}})\}+\frac{\partial}{\partial\sigma_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}^{2}}\}\\
+ & =-\frac{1}{\sigma_{t}}+\frac{(a_{t}-\mu_{t})^{2}}{\sigma_{t}^{3}}\\
+ & =\frac{1}{\sigma_{t}}\{(\frac{a_{t}-\mu_{t}}{\sigma_{t}})^{2}-1\}
+\end{align*}
+
+Hence the updates will be
+\begin{align}
+\mu_{t+1} & =\mu_{t}+\beta(R_{t}-\bar{R_{t})}\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\mu_{t}}\nonumber \\
+ & =\mu_{t}+\beta R_{t}\frac{(a_{t}-\mu_{t})}{\sigma_{t}^{2}}\label{baseline is 0}
+\end{align}
+
+and
+\begin{align*}
+\sigma_{t+1} & =\sigma_{t}+\beta(R_{t}-\bar{R_{t})}\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\sigma_{t}}\\
+ & =\sigma_{t}+\beta\frac{R_{t}}{\sigma_{t}}\{(\frac{a_{t}-\mu_{t}}{\sigma_{t}})^{2}-1\}
+\end{align*}
+\end{enumerate}
+
+\end{document}

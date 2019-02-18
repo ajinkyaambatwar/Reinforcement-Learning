@@ -1,0 +1,602 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{algorithmic}
+\usepackage{algorithm2e}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement H
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Intro to RL and Bandits
+\end_layout
+
+\begin_layout Author
+Ajinkya Ambatwar
+\begin_inset Newline newline
+\end_inset
+
+EE16B104
+\begin_inset Newline newline
+\end_inset
+
+Dept.
+ Of Electrical Engineering
+\end_layout
+
+\begin_layout Enumerate
+Tic-tac toe has a very limited and small set of possible states.
+ So learning through previous experience is not so complicated task for
+ the RL agent.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Now the agent has to make sure that it visits every possible state often
+ in order to learn the dynamics of early winning.
+ Also if it does an exploring start, it will have a benefit of making prediction
+ with a set of statistically similar position.
+ Now speaking of statistically similar, the agent can easily learn such
+ states if we simplify the definition of 
+\series bold
+'State'
+\series default
+ and 
+\series bold
+'Action'
+\series default
+.
+ Since by this the agent can look for multiple statistically similar states
+ though they might not look the same as per the board position.
+ This will lessen the dimension of the state and the agent will work with
+ smaller state space by taking the advantage of the similarity.
+\end_layout
+
+\begin_layout Enumerate
+So if our opponent is not taking the advantage of symmetry then it is recommende
+d for the agent not to go for symmetry.
+ As we have seen that the symmetry based method will reduce the state space
+ and also the number of parameters defining the state.
+ So if the opponent is not the one seeking for symmetry and goes by seeking
+ the actual set of parameters defining a set(and hence works with a larger
+ state space) the agent should also do the same.
+ 
+\end_layout
+
+\begin_layout Enumerate
+So symmetrically equivalent positions should have the same value if we are
+ considering the system to be fully Markov(as is the case most of the times).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+If the leaning agent starts playing against itself, initially both of them
+ will start taking very random moves that probaly won't make any sense as
+ they will be doing an exploratory start.
+ But later as they go on playing against each other they might come up with
+ a strategy that even the real human players are not recommended to take
+ and might even win with that policy.
+ So it might learn a totally different policy.
+ But the learning duration will be a lot.
+ Also there is a possibility that the agent might develope a strategy that
+ will facilitate by winning itself.
+ Hence it will oscillate between a 
+\begin_inset Quotes eld
+\end_inset
+
+Good
+\begin_inset Quotes erd
+\end_inset
+
+ and a 
+\begin_inset Quotes eld
+\end_inset
+
+Bad
+\begin_inset Quotes erd
+\end_inset
+
+ move.
+ Hence it might not even learn based on the sustained policy.
+\end_layout
+
+\begin_layout Enumerate
+\noindent
+If the agent always learns to play completely greedy, it will definitely
+ lose the benefit of exploration.
+ This will result in the agent getting stuck at the local optima which in
+ most of the cases will be a suboptimum point.
+ Now if the 
+\begin_inset Formula $Q$
+\end_inset
+
+ for all the action is initialized with same constant(say zero) and the
+ first action is determined, then with a completely greedy policy the agent
+ will go on just exploiting the same action again and again(if the initial
+ reward it gets is positive) and if the initial action chosen is not the
+ 
+\begin_inset Quotes eld
+\end_inset
+
+best action
+\begin_inset Quotes erd
+\end_inset
+
+ it will saturate at some lesser value of average reward far from the optimal
+ reward that it coulf have received.
+ So compared to non-greedy(or 
+\begin_inset Formula $\epsilon-greedy$
+\end_inset
+
+) player, initially it might do well as it will choose the greedy actions
+ and take over the other player, but in long term(say after 10 trials) it
+ will start performing poor and fall behind the non-greedy player.
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename /home/ajinkya/Pictures/greedy_vs_non_greedy.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Greedy vs 
+\begin_inset Formula $\epsilon-greedy$
+\end_inset
+
+ policy
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+In the optimistic start, the average Q values for all the arms is initialized
+ with some larger value, larger than the reward supposed to be received
+ after every action.
+ So because of this, the agent will do more initial exploration automatically.
+ So in this process, if somehow it comes across the 
+\begin_inset Formula $better$
+\end_inset
+
+ choices of actions initially, the average Q value for those actions(say
+ 
+\begin_inset Formula $a_{better}$
+\end_inset
+
+), 
+\begin_inset Formula $Q(a_{better})$
+\end_inset
+
+will be magnified which will emphasis the agent to play more of such actions.This
+ results in up spikes.
+ But as the agent is still doing exploration, it is expected to come across
+ some worse action choices(say 
+\begin_inset Formula $a_{worse}$
+\end_inset
+
+), hence the Q values for those actions(
+\begin_inset Formula $Q(a_{worse})$
+\end_inset
+
+) will be diminished which will result in initial poor play and hence will
+ show down spikes.
+\end_layout
+
+\begin_layout Enumerate
+In such a setup, it is clear that the actual reward vector is changing at
+ every time step and the regret is defined based on the actual reward rather
+ than the long term return.
+ So this can be assumed as a single, nonstationary 
+\begin_inset Formula $k$
+\end_inset
+
+-armed bandit problem and we can try to solve it using one of the non-stationary
+ bandit methods(say by keeping 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ constant).
+ But unless the the true action value(here the revealed rewards at each
+ time steps) change slowly, these methods will not work well.
+ So the necessary condition for this to work is that the variance of the
+ unknown distribution should be less.
+ As mentioned, unless we are sure that the rewards are not changing heavily,
+ we can benefit ourselves with the fact that the rewards are revealed and
+ go for the greedy action every time.
+ And suppose the rewards are changing heavily, then in this case it would
+ be recommended to learn a policy.
+ Then in such a case if the some distinctive clue is provided to how the
+ rewards will be at given time step compared to other time steps, then after
+ sufficient trials a policy can be learned to associate the nature of sampled
+ rewards with the current state of the task.
+ This kind of learning is also called as 
+\begin_inset Quotes eld
+\end_inset
+
+
+\shape italic
+associative mapping
+\shape default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+The idea should be
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Initially take some trials with the normal UCB algorithm method.
+\end_layout
+
+\begin_layout Enumerate
+If the implemetation is devised properly the action values are expected
+ to converge to their true means after infinite iterations.
+\end_layout
+
+\begin_layout Enumerate
+Say after first K iterations, we will have some estimate of 
+\begin_inset Formula $\mu$
+\end_inset
+
+ for each action with some uncertainty.
+ Now as we already know the true values for each action, we will pair the
+ estimate with that true value which lies in the 
+\begin_inset Formula $\epsilon-$
+\end_inset
+
+range with probability
+\begin_inset Formula 
+\[
+P[|\mu-Q_{K}|\leq\epsilon]
+\]
+
+\end_inset
+
+ which should be the largest in order to find the correct pair.
+ So now the true value and the estimate pairs are formed correctly with
+ higher probability.
+\end_layout
+
+\begin_layout Enumerate
+Now as we know the true value and estimate pairs, now we can set the bounds
+ as follows
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Let 
+\begin_inset Formula $\epsilon_{s}$
+\end_inset
+
+ be the required certainty.
+\end_layout
+
+\begin_layout Enumerate
+Now as per the chernoff inequality
+\begin_inset Formula 
+\[
+P[|\mu-Q_{n}|\leq\epsilon_{s}]\geq exp(-2\epsilon_{s}^{2}n)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+With this we can ascertain the value 
+\begin_inset Formula $n$
+\end_inset
+
+ for more certain bounds.
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+The derivation is as follows -
+\begin_inset Formula 
+\begin{align*}
+\rho_{t+1}(a) & =\rho_{t}(a)+\beta\frac{\partial E(R_{t})}{\partial\rho_{t}(a)}\\
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+where 
+\begin_inset Formula $E[R_{t}]=\sum_{b}\pi_{t}(b)q_{*}(b)$
+\end_inset
+
+.
+ Now
+\begin_inset Formula 
+\begin{align*}
+\frac{\partial E[R_{t}]}{\partial\rho_{t}(a)} & =\frac{\partial}{\partial\rho_{t}(a)}[\sum\pi_{t}(b)q_{*}(b)_{b}]\\
+ & =\sum_{b}q_{*}(b)\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}\\
+ & =\sum_{b}[q_{*}(b)-X_{t}]\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $X_{t}$
+\end_inset
+
+ is a scalar and 
+\begin_inset Formula $\sum_{b}\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}=0$
+\end_inset
+
+, hence inclusion of 
+\begin_inset Formula $X_{t}$
+\end_inset
+
+ won't make any difference.
+ Now when 
+\begin_inset Formula $\rho_{t}(a)$
+\end_inset
+
+ is changed,some actions'probabilities go up while some others go down but
+ the sum of all the probabilities must be 1 hence the sum of partial derivative
+ is 0.
+\begin_inset Formula 
+\begin{align}
+\frac{\partial E[R_{t}]}{\partial\rho_{t}(a)} & =\sum_{b}\pi_{t}(b)(q_{*}(b)-X_{t})\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)}/\partial\pi_{t}(b)\nonumber \\
+ & =E[(q_{*}(A_{t})-X_{t})\frac{\partial\pi_{t}(A_{t})}{\partial\rho_{t}(a)}/\partial\pi_{t}(A_{t})]\label{A(t) is the random variable}\\
+ & =E[(R_{t}-\bar{R_{t}})\frac{\partial\pi_{t}(A_{t})}{\partial\rho_{t}(a)}/\partial\pi_{t}(A_{t})]
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where here we have chosen 
+\begin_inset Formula $X_{t}=\bar{R_{t}}$
+\end_inset
+
+(baseline) and substituted 
+\begin_inset Formula $R_{t}$
+\end_inset
+
+ for 
+\begin_inset Formula $q_{*}(A_{t})$
+\end_inset
+
+ which is valid because 
+\begin_inset Formula $E[R_{t}|A_{t}]=q_{*}(A_{t})$
+\end_inset
+
+ .
+ Now
+\begin_inset Formula 
+\begin{align}
+\frac{\partial\pi_{t}(b)}{\partial\rho_{t}(a)} & =\frac{\partial}{\partial\rho_{t}(a)}\pi_{t}(b)\nonumber \\
+ & =\frac{\partial}{\partial\rho_{t}(a)}[\frac{exp(\rho_{t}(b))}{\sum_{c=1}^{n}exp(\rho_{t}(c))}]\nonumber \\
+ & =\frac{\frac{\partial exp(\rho_{t}(b)}{\partial\rho_{t}(a)}\sum_{c=1}^{k}exp(\rho_{t}(c))-exp(\rho_{t}(b)\frac{\partial\sum_{c=1}^{k}exp(\rho_{t}(c))}{\partial\rho_{t}(a)}}{(\sum_{c=1}^{n}exp(\rho_{t}(c)))^{2}}\nonumber \\
+ & =\frac{1_{a=b}exp(\rho_{t}(b))\sum_{c=1}^{k}exp(\rho_{t}(c))-exp(\rho_{t}(b))exp(\rho_{t}(a))}{(\sum_{c=1}^{n}exp(\rho_{t}(c)))^{2}}\nonumber \\
+ & =1_{a=b}\pi_{t}(b)-\pi_{t}(b)\pi_{t}(a)\nonumber \\
+ & =\pi_{t}(b)(1_{a=b}-\pi_{t}(a))\label{eq}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now substituting (3) in (2), we get
+\begin_inset Formula 
+\begin{equation}
+\frac{\partial E[R_{t}]}{\partial\rho_{t}(a)}=E[(R_{t}-\bar{R_{t}})(1_{a=A_{t}}-\pi_{t}(a))]\label{eq-1}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now for each time step update we shall take sample of (4) and substitute
+ it in the original equation, which gives
+\begin_inset Formula 
+\[
+\rho_{t+1}(a)=\rho_{t}(a)+\beta(R_{t}-\bar{R_{t}})(1_{a=A_{t}}-\pi_{t}(a))
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\bar{R_{t}}$
+\end_inset
+
+ is the baseline
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Assuming the parameters to be 
+\begin_inset Formula $\mu$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma$
+\end_inset
+
+, the policy 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is
+\begin_inset Formula 
+\begin{align}
+\pi(a|\mu,\sigma^{2}) & =\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(a-\mu)^{2}}{2\sigma})\label{Sampled from the normal distribution}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Now for the mean we can write
+\begin_inset Formula 
+\begin{align*}
+\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\mu_{t}} & =\frac{\partial}{\partial\mu_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}}\}\\
+ & =\frac{a_{t}-\mu_{t}}{\sigma_{t}^{2}}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly for the variance we can write,
+\begin_inset Formula 
+\begin{align*}
+\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\sigma_{t}} & =\frac{\partial}{\partial\sigma_{t}}\{-ln(\sqrt{2\pi\sigma_{t}})\}+\frac{\partial}{\partial\sigma_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}^{2}}\}\\
+ & =-\frac{1}{\sigma_{t}}+\frac{(a_{t}-\mu_{t})^{2}}{\sigma_{t}^{3}}\\
+ & =\frac{1}{\sigma_{t}}\{(\frac{a_{t}-\mu_{t}}{\sigma_{t}})^{2}-1\}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Hence the updates will be
+\begin_inset Formula 
+\begin{align}
+\mu_{t+1} & =\mu_{t}+\beta(R_{t}-\bar{R_{t})}\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\mu_{t}}\nonumber \\
+ & =\mu_{t}+\beta R_{t}\frac{(a_{t}-\mu_{t})}{\sigma_{t}^{2}}\label{baseline is 0}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and
+\begin_inset Formula 
+\begin{align*}
+\sigma_{t+1} & =\sigma_{t}+\beta(R_{t}-\bar{R_{t})}\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\sigma_{t}}\\
+ & =\sigma_{t}+\beta\frac{R_{t}}{\sigma_{t}}\{(\frac{a_{t}-\mu_{t}}{\sigma_{t}})^{2}-1\}
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
