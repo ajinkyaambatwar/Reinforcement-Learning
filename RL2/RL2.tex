@@ -8,7 +8,6 @@
 \makeatletter
 
 \special{papersize=\the\paperwidth,\the\paperheight}
-
 \usepackage{algorithmic}
 \usepackage{algorithm2e}
 
@@ -183,18 +182,18 @@ $\bar{R_{t}}$ is the baseline
 \item Assuming the parameters to be $\mu$ and $\sigma$, the policy $\pi$
 is
 \begin{align}
-\pi(a|\mu,\sigma^{2}) & =\frac{1}{\sqrt{2\pi\sigma}}exp(\frac{-(a-\mu)^{2}}{2\sigma})\label{Sampled from the normal distribution}
+\pi(a|\mu,\sigma^{2}) & =\frac{1}{\sqrt{2\pi\sigma^{2}}}exp(\frac{-(a-\mu)^{2}}{2\sigma^{2}})\label{Sampled from the normal distribution}
 \end{align}
 
 Now for the mean we can write
 \begin{align*}
-\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\mu_{t}} & =\frac{\partial}{\partial\mu_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}}\}\\
+\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\mu_{t}} & =\frac{\partial}{\partial\mu_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}^{2}}\}\\
  & =\frac{a_{t}-\mu_{t}}{\sigma_{t}^{2}}
 \end{align*}
 
 Similarly for the variance we can write,
 \begin{align*}
-\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\sigma_{t}} & =\frac{\partial}{\partial\sigma_{t}}\{-ln(\sqrt{2\pi\sigma_{t}})\}+\frac{\partial}{\partial\sigma_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}^{2}}\}\\
+\frac{\partial ln(\pi(a_{t}|\mu_{t},\sigma_{t})}{\partial\sigma_{t}} & =\frac{\partial}{\partial\sigma_{t}}\{-ln(\sqrt{2\pi\sigma_{t}^{2}})\}+\frac{\partial}{\partial\sigma_{t}}\{-\frac{(a_{t}-\mu_{t})^{2}}{2\sigma_{t}^{2}}\}\\
  & =-\frac{1}{\sigma_{t}}+\frac{(a_{t}-\mu_{t})^{2}}{\sigma_{t}^{3}}\\
  & =\frac{1}{\sigma_{t}}\{(\frac{a_{t}-\mu_{t}}{\sigma_{t}})^{2}-1\}
 \end{align*}
