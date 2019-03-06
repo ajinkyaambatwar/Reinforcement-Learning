@@ -1,0 +1,1085 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{algorithm,algpseudocode}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Programming- MAB
+\end_layout
+
+\begin_layout Author
+Ajinkya Ambatwar
+\begin_inset Newline newline
+\end_inset
+
+EE16B104
+\begin_inset Newline newline
+\end_inset
+
+Dept.
+ Of Electrical Engineering
+\end_layout
+
+\begin_layout Section*
+Explanation
+\end_layout
+
+\begin_layout Subsection
+\begin_inset Formula $\epsilon$
+\end_inset
+
+-greedy
+\end_layout
+
+\begin_layout Standard
+For 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+-greedy, the plot looks like this - 
+\end_layout
+
+\begin_layout Standard
+As we can see from the plots, the average reward for 
+\begin_inset Formula $\epsilon=0$
+\end_inset
+
+ is the saturated at a local optima which is a sub-optimal point.
+ This is because this case lacks any exploration and quickly settles to
+ an action with the highest instantaneous reward.
+ This action might not be the optimal hence the optimal action percent is
+ also bad for this case.
+\end_layout
+
+\begin_layout Standard
+Comparing 
+\begin_inset Formula $\epsilon=0.1$
+\end_inset
+
+ and 
+\begin_inset Formula $\epsilon=0.01$
+\end_inset
+
+ cases, we can observe that for given number of iterations 
+\begin_inset Formula $\epsilon=0.1$
+\end_inset
+
+ stays at higher average reward and optimal action percentage.
+ This is because for higher 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ the algorithm will explore more and hence find the best action earlier
+ but won't exploit it much because of more exploratory nature.
+ Hence initial performance of 
+\begin_inset Formula $\epsilon=0.1$
+\end_inset
+
+ is better but in longer terms 
+\begin_inset Formula $\epsilon=0.01$
+\end_inset
+
+ will overtake it as this value of 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ will make the algorithm to take the best action more often than the other
+ actions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Programming/images/figure_1.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/figure_2.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Plots for 
+\begin_inset Formula $\epsilon-greedy$
+\end_inset
+
+ algorithm
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Softmax
+\end_layout
+
+\begin_layout Standard
+For Softmax action distribution, the plots look like this - 
+\end_layout
+
+\begin_layout Standard
+For softmax distribution, as the value of temperature increases the exploratory
+ nature of the algorithm increases but it simultaneously reduces the exploitory
+ nature.
+ Hence for very high value of temp(Temp = 100), algorithm just goes on exploring
+ and doesn't settle with a high rewarding arm.
+ For smaller values of Temp, the algorithm gives enough weightage to exploration
+ and exploitation and finds the right arm with higher reward.
+\end_layout
+
+\begin_layout Standard
+For intermediate temperature value(Temp = 1), the algorithm will explore
+ more but will exploits very less and hence reach a suboptimal point.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/figure_2.1.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/figure_2.2.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Plots for Softmax distribution
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+UCB
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Q_{estimated}(a)=Q_{t}(a)+c\sqrt{\frac{ln(t)}{N_{t}(a)}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For UCB, the plots look like this - 
+\end_layout
+
+\begin_layout Standard
+The parameter c indicates the degree the exploration.
+ For c=10, the algorihtm will have more uncertainty in the estimation of
+ true expected reward and will oscillate more.
+ Because of more variance in the value it might pick an action with lower
+ expected reward but larger value of 
+\begin_inset Formula $Q_{estimated}$
+\end_inset
+
+ hence will get stuck an suboptimal arm as is seen from the graph.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/figure_3.1.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/figure_3.2.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Plots for UCB
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Arms value comparison
+\end_layout
+
+\begin_layout Standard
+The comparison plots for the algorithms for k_arms = 10 and k_arms = 1000
+ look like this
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset Formula $\epsilon-greedy$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/rew_comp_eps.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/opt_act_comp_eps.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison for 
+\begin_inset Formula $\epsilon-greedy$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+As can be seen form the plot the average return for more number of arms
+ is more as larger number of arms means more arms will have higher expected
+ rewards.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Softmax
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/rew_comp_temp.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/opt_act_comp_temp.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Comparison for Softmax
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+For softmax the effect of arms is very less as the probility is a function
+ of 
+\begin_inset Formula $exp(Q_{t})$
+\end_inset
+
+ and is divided by the sum of it.
+ Hence the probilit values will be more of less same independent of number
+ of arms.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+UCB
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/rew_comp_ucb.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "100col%"
+special "none"
+height "1in"
+height_special "totalheight"
+thickness "0.4pt"
+separation "3pt"
+shadowsize "4pt"
+framecolor "black"
+backgroundcolor "none"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Programming/images/opt_act_comp_ucb.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+With very large number of arms and all other parameters kept same, the explorato
+ry nature of the algorithm will overcome the exploitation and the rewards
+ will decrease significantly.
+ Regarding the optimal action, it may be independent of the number of action.
+ Due to some unknown error, the optimal action plot for 10 arms is not plotted
+ here.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+UCB comparison
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Advertise suggestion
+\end_layout
+
+\begin_layout Standard
+From the data given at every iteration - 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{algorithmic}[1]
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+State{W(a) = [w1 w2 w3 w4]}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+State{$
+\backslash
+pi_{t}(a)=Softmax(W(a)*X^T)$}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+State{Pick an action with probability $
+\backslash
+pi_{t}(a)$}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+State{Get a reward}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+State{Do the reinforcement update on W}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+State{Test the updated W on 450 iterations}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+State{Get the average reward for 450 iteration}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{algorithmic}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Advertisement recommendation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The reinforcemnt update for 
+\begin_inset Formula $W$
+\end_inset
+
+ is given by
+\begin_inset Formula 
+\[
+W_{t+1}(a)=W_{t}(a)+\alpha(R_{t}-b_{t})(1_{a=A_{t}}-\pi_{t}(a))X_{t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\begin_inset Formula $X_{t}$
+\end_inset
+
+ is the feature vecture for the sample/user picked up at time 
+\begin_inset Formula $t$
+\end_inset
+
+ and 
+\begin_inset Formula $b_{t}$
+\end_inset
+
+ is the baseline set at the avaerage total reward till time 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ 
+\begin_inset Formula $1_{a=A_{t}}$
+\end_inset
+
+is one only when action picked up at time 
+\begin_inset Formula $t$
+\end_inset
+
+ is 
+\begin_inset Formula $a$
+\end_inset
+
+ else 0.
+ 
+\end_layout
+
+\begin_layout Standard
+The parameters chosen for simulation are -
+\end_layout
+
+\begin_layout Enumerate
+TRAIN_STEPS = 10000
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Increasing it further to 20000 didn't given much improvement for performnace
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+LEARNING_RATE 
+\begin_inset Formula $\alpha$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $\alpha$
+\end_inset
+
+is made a function of time step as
+\begin_inset Formula 
+\[
+\alpha_{t}=exp(-0.0001t)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+This makes sure that when initially 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is more the updates will be made faster
+\end_layout
+
+\begin_layout Enumerate
+As time progresses 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ becomes smaller making the further updates smaller and improving convergence
+ rate as well as stability
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Standard
+The average action plot looks like this - 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename Programming/images/advertising_reward.png
+	scale 80
+	rotateOrigin center
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The reward got saturated at around 2.64 and didn't show much improvement
+ with change in parametes.
+\end_layout
+
+\end_body
+\end_document
